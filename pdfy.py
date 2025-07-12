@@ -5,15 +5,22 @@ import img2pdf
 import sys
 import contextlib
 
-book_name = "book.pdf"
-if len(sys.argv) == 2:
-    book_name = sys.argv[1]
+if len(sys.argv) != 3:
+    print("Usage: python pdfy.py <book_path> <book_name>")
+    sys.exit(1)
+
+book_path = sys.argv[1]
+book_name = sys.argv[2]
+
+if os.path.exists(f'{book_path}/{book_name}.pdf'):
+    book_name = book_name + "_copy"
+    print(f"File {book_path}/{book_name}.pdf already exists, adding suffix to book_name")
+
 # Replace the directory path with the folder containing PNG images to be converted
-directory_path = "./book"
 
 # Get full paths of PNG files and sort them
-image_files = [os.path.join(directory_path, filename) 
-               for filename in sorted(os.listdir(directory_path)) 
+image_files = [os.path.join(book_path, filename) 
+               for filename in sorted(os.listdir(book_path)) 
                if filename.endswith(".png")]
 
 print("Converting images to pdf...", end="\r", flush=True)
